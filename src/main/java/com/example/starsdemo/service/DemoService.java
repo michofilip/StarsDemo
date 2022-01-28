@@ -2,9 +2,7 @@ package com.example.starsdemo.service;
 
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -14,7 +12,7 @@ public class DemoService {
     record User(String name, int age, boolean active) {
     }
 
-//    @PostConstruct
+    //    @PostConstruct
     public void demo() {
 
         User ala = new User("Ala", 20, true);
