@@ -1,8 +1,5 @@
 package com.example.starsdemo.exception;
 
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-@ResponseStatus()
 public class ElementNotFountException extends RuntimeException {
     public ElementNotFountException() {
         super();

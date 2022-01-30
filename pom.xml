@@ -15,7 +15,7 @@
     <description>StarsDemo</description>
     <properties>
         <java.version>17</java.version>
-        <flyway.version>8.4.1</flyway.version>
+        <flyway.version>8.4.2</flyway.version>
     </properties>
     <dependencies>
         <dependency>
