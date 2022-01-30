@@ -1,4 +1,4 @@
-package com.example.starsdemo.utils;
+package com.example.starsdemo.utils.either;
 
 import java.util.function.Function;
 

@@ -1,10 +1,11 @@
 package com.example.starsdemo.service;
 
+import com.example.starsdemo.utils.option.None;
+import com.example.starsdemo.utils.option.Option;
+import com.example.starsdemo.utils.option.Some;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 @Service
 public class DemoService {
@@ -50,32 +51,5 @@ public class DemoService {
         };
 
         System.out.println(result);
-    }
-
-    sealed interface Option<T> permits Some, None {
-
-        <U> Option<U> flatmap(Function<T, Option<U>> function);
-
-        default <U> Option<U> map(Function<T, U> function) {
-            return flatmap((T t) -> new Some<>(function.apply(t)));
-        }
-
-        default Option<T> filter(Predicate<T> predicate) {
-            return flatmap((T t) -> predicate.test(t) ? this : new None<>());
-        }
-    }
-
-    record Some<T>(T value) implements Option<T> {
-        @Override
-        public <U> Option<U> flatmap(Function<T, Option<U>> function) {
-            return function.apply(value());
-        }
-    }
-
-    record None<T>() implements Option<T> {
-        @Override
-        public <U> Option<U> flatmap(Function<T, Option<U>> function) {
-            return new None<>();
-        }
     }
 }

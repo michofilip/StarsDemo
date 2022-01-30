@@ -1,9 +1,11 @@
 package com.example.starsdemo.controller;
 
+import com.example.starsdemo.exception.ElementNotFountException;
+import com.example.starsdemo.exception.ForbiddenPlanetException;
 import com.example.starsdemo.service.StarService;
-import com.example.starsdemo.utils.Either;
-import com.example.starsdemo.utils.Left;
-import com.example.starsdemo.utils.Right;
+import com.example.starsdemo.utils.either.Either;
+import com.example.starsdemo.utils.either.Left;
+import com.example.starsdemo.utils.either.Right;
 import com.example.starsdemo.view.Star;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,26 +29,31 @@ public class StarController {
         return starService.findAll();
     }
 
-    @GetMapping("v1/{id}")
-    public Star findById1(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public Star findById(@PathVariable int id) {
         return starService.findById(id);
     }
 
-    @GetMapping("v2/{id}")
-    public ResponseEntity<Either<String, Star>> findById2(@PathVariable int id) {
-        return switch (starService.findById1(id)) {
-            case Right<RuntimeException, Star> right -> new ResponseEntity<>(Either.right(right.value()), HttpStatus.OK);
-            case Left<RuntimeException, Star> left -> new ResponseEntity<>(Either.left(left.value().getMessage()), HttpStatus.NOT_FOUND);
+    @GetMapping("/{id}/str")
+    public ResponseEntity<Either<String, Star>> findByIdOrString(@PathVariable int id) {
+        return switch (starService.findByIdOrString(id)) {
+            case Right<String, Star> right -> new ResponseEntity<>(right, HttpStatus.OK);
+            case Left<String, Star> left -> new ResponseEntity<>(left, HttpStatus.NOT_FOUND);
         };
     }
 
-    @GetMapping("v3/{id}")
-    public ResponseEntity<Either<String, Star>> findById3(@PathVariable int id) {
-        Either<String, Star> result = starService.findById1(id).swap().map(Throwable::getMessage).swap();
+    @GetMapping("/{id}/exc")
+    public ResponseEntity<Either<String, Star>> findByIdOrException(@PathVariable int id) {
+        return switch (starService.findByIdOrException(id)) {
+            case Right<RuntimeException, Star> right -> new ResponseEntity<>(Either.right(right.value()), HttpStatus.OK);
 
-        return switch (result) {
-            case Right<String, Star> right -> new ResponseEntity<>(right, HttpStatus.OK);
-            case Left<String, Star> left -> new ResponseEntity<>(left, HttpStatus.NOT_FOUND);
+            case Left<RuntimeException, Star> left -> switch (left.value()) {
+                case ElementNotFountException ex -> new ResponseEntity<>(Either.left(ex.getMessage()), HttpStatus.NOT_FOUND);
+
+                case ForbiddenPlanetException ex -> new ResponseEntity<>(Either.left(ex.getMessage()), HttpStatus.FORBIDDEN);
+
+                case default -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            };
         };
     }
 }

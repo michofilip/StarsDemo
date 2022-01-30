@@ -1,6 +1,8 @@
-package com.example.starsdemo.utils;
+package com.example.starsdemo.utils.either;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public sealed interface Either<L, R> permits Left, Right {
     static <L, R> Either<L, R> right(R right) {
@@ -25,6 +27,13 @@ public sealed interface Either<L, R> permits Left, Right {
         return switch (this) {
             case Right<L, R> right -> Either.left(right.value());
             case Left<L, R> left -> Either.right(left.value());
+        };
+    }
+
+    default Either<L, R> filterOrElse(Predicate<R> predicate, Supplier<L> orElse) {
+        return switch (this) {
+            case Right<L, R> right -> predicate.test(right.value()) ? this : Either.left(orElse.get());
+            case Left<L, R> left -> this;
         };
     }
 }
