@@ -1,6 +1,7 @@
 package com.example.starsdemo.controller.exceptionhandler;
 
 import com.example.starsdemo.exception.ElementNotFountException;
+import com.example.starsdemo.exception.ForbiddenPlanetException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,9 +12,23 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(ElementNotFountException.class)
-    public ResponseEntity<String> handleElementNotFountException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+//    @ExceptionHandler(ElementNotFountException.class)
+//    public ResponseEntity<String> handleElementNotFountException(Exception ex, WebRequest request) {
+//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+//    }
+//
+//    @ExceptionHandler(ForbiddenPlanetException.class)
+//    public ResponseEntity<String> handleForbiddenPlanetException(Exception ex, WebRequest request) {
+//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+//    }
+
+    @ExceptionHandler({ElementNotFountException.class, ForbiddenPlanetException.class})
+    public ResponseEntity<String> handleCustomException(Exception exception, WebRequest request) throws Exception {
+        return switch (exception) {
+            case ElementNotFountException ex -> new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+            case ForbiddenPlanetException ex -> new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+            case default -> throw exception;
+        };
     }
 
 }
