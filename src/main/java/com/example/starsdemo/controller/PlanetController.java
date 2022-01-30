@@ -1,8 +1,8 @@
 package com.example.starsdemo.controller;
 
 import com.example.starsdemo.service.PlanetService;
-import com.example.starsdemo.service.StarService;
 import com.example.starsdemo.view.Planet;
+import com.example.starsdemo.view.PlanetCount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +25,10 @@ public class PlanetController {
     @GetMapping("/random")
     public List<Planet> findAllRandom() {
         return planetService.findAllRandom();
+    }
+
+    @GetMapping("/count")
+    public List<PlanetCount> getPlanetCount() {
+        return planetService.getPlanetCount();
     }
 }

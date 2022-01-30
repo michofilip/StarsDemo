@@ -3,6 +3,7 @@ package com.example.starsdemo.service;
 import com.example.starsdemo.db.repository.PlanetRepository;
 import com.example.starsdemo.utils.CollectionUtils;
 import com.example.starsdemo.view.Planet;
+import com.example.starsdemo.view.PlanetCount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +23,9 @@ public class PlanetService {
 
     public List<Planet> findAllRandom() {
         return CollectionUtils.shuffle(findAll());
+    }
+
+    public List<PlanetCount> getPlanetCount() {
+        return planetRepository.getPlanetCount();
     }
 }
