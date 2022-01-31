@@ -1,16 +1,16 @@
-package com.example.starsdemo.controller.exceptionhandler;
+package com.example.starsdemo.controller;
 
 import com.example.starsdemo.exception.ElementNotFountException;
 import com.example.starsdemo.exception.ForbiddenPlanetException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
-public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+@RestControllerAdvice
+public class ExceptionController extends ResponseEntityExceptionHandler {
 
 //    @ExceptionHandler(ElementNotFountException.class)
 //    public ResponseEntity<String> handleElementNotFountException(Exception ex, WebRequest request) {
